@@ -212,9 +212,6 @@ def bulk_modulus_errors() -> dict[str, float]:
                 # B = -V * dP/dV
                 v0 = volumes[0]
                 if v0 > 0:
-                    v_rel = np.array(volumes) / v0
-                    p_array = np.array(pressures)
-                    
                     # Simple finite difference estimate
                     if len(pressures) > 1:
                         dV = volumes[-1] - volumes[0]

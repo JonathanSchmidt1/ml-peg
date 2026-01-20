@@ -9,7 +9,7 @@ from typing import Any
 
 from ase import Atoms
 from ase.constraints import StrainFilter
-from ase.io import read
+from ase.io import read, write
 from ase.optimize import BFGS
 import pytest
 
@@ -158,7 +158,6 @@ def test_pressure(mlip: tuple[str, Any]) -> None:
                 }
                 
                 # Write trajectory
-                from ase.io import write
                 write(
                     struct_out_dir / f"{struct_name}_P{pressure}GPa.extxyz",
                     relaxed,
