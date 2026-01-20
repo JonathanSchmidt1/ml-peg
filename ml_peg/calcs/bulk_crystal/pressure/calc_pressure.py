@@ -76,11 +76,23 @@ def test_pressure(mlip: tuple[str, Any]) -> None:
     model_name, model = mlip
     calc = model.get_calculator()
 
-    # Download data from Alexandria repository
-    data_dir = download_github_data(
-        filename="pressure_structures.zip",
-        github_uri="https://alexandria.icams.rub.de/data/pbe/benchmarks/pressure",
-    )
+    # Try to download data from Alexandria repository
+    # Note: The data should be available as a zip file at the specified URL
+    try:
+        data_dir = download_github_data(
+            filename="pressure_structures.zip",
+            github_uri="https://alexandria.icams.rub.de/data/pbe/benchmarks/pressure",
+        )
+    except Exception as e:
+        # If download fails, check if data exists locally
+        local_data_dir = DATA_PATH
+        if list(local_data_dir.glob("*.extxyz")):
+            data_dir = local_data_dir
+        else:
+            pytest.skip(
+                f"Could not download pressure data from Alexandria repository: {e}. "
+                "Please download the data manually and place it in the data/ directory."
+            )
 
     # Load reference structures and metadata
     structures_path = data_dir / "structures.json"
@@ -89,7 +101,11 @@ def test_pressure(mlip: tuple[str, Any]) -> None:
         # If JSON doesn't exist, try loading structures from extxyz files in data directory
         structure_files = list(data_dir.glob("*.extxyz"))
         if not structure_files:
-            pytest.skip("No structure files found in pressure benchmark data")
+            pytest.skip(
+                "No structure files found in pressure benchmark data. "
+                "Please download data from https://alexandria.icams.rub.de/data/pbe/benchmarks/pressure/ "
+                "and place it in ml_peg/calcs/bulk_crystal/pressure/data/"
+            )
         structures_data = {}
         for struct_file in structure_files:
             name = struct_file.stem

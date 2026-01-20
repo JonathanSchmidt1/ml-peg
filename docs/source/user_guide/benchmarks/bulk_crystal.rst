@@ -115,3 +115,64 @@ Reference data:
 
 * Same as input data
 * PBE
+
+
+Pressure
+========
+
+Summary
+-------
+
+Performance when predicting structural properties of bulk crystals under external
+pressure (0-150 GPa). Tests the ability to accurately model compression behavior
+and bulk moduli derived from pressure-volume relationships.
+
+
+Metrics
+-------
+
+(1) Volume Compression
+
+Mean relative volume compression from 0 to 150 GPa
+
+For each structure, geometry relaxations are performed at multiple pressure points
+(0, 10, 30, 50, 100, and 150 GPa) using ASE's StrainFilter with scalar_pressure
+parameter. The StrainFilter allows the unit cell to relax under constant external
+pressure while maintaining the crystal symmetry. Structures are optimized using
+BFGS until forces are below 0.05 eV/Å.
+
+The volume compression metric measures how the crystal volume changes with pressure,
+which should show monotonic decrease. This tests whether models can correctly
+predict the compressibility of materials.
+
+
+(2) Bulk Modulus
+
+Mean bulk modulus estimated from pressure-volume data
+
+The bulk modulus (B) is estimated from the pressure-volume relationship using the
+derivative B = -V(dP/dV). This provides an alternative measure of elastic
+properties compared to the strain-based elasticity benchmark, testing whether
+models can reproduce the correct mechanical response to isotropic compression.
+
+
+Computational cost
+------------------
+
+Medium: tests are likely to take minutes to hours to run on CPU/GPU, depending on
+the number of structures and pressure points evaluated.
+
+
+Data availability
+-----------------
+
+Input structures:
+
+* Bulk crystal structures from https://alexandria.icams.rub.de/data/pbe/benchmarks/pressure/
+* Various crystal types including elements, binary compounds, and more complex materials
+
+Reference data:
+
+* DFT calculations using PBE functional
+* Pressure range: 0-150 GPa
+* Multiple pressure points for accurate P-V curve construction
