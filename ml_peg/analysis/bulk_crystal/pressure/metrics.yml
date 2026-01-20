@@ -1,0 +1,13 @@
+metrics:
+  Volume Compression:
+    good: 0.0
+    bad: 0.2
+    unit: ""
+    tooltip: "Mean relative volume compression from 0 to 150 GPa"
+    level_of_theory: PBE
+  Bulk Modulus:
+    good: 0.0
+    bad: 50.0
+    unit: GPa
+    tooltip: "Mean bulk modulus estimated from pressure-volume data"
+    level_of_theory: PBE
