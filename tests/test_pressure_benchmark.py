@@ -28,23 +28,22 @@ def test_pressure_benchmark_files_exist():
 
 def test_pressure_benchmark_imports():
     """Test that pressure benchmark modules can be imported."""
+    import pytest
+    
     try:
         from ml_peg.calcs.bulk_crystal.pressure import calc_pressure
         assert hasattr(calc_pressure, "test_pressure")
     except ImportError as e:
-        # If dependencies are missing, skip the test
-        pass
+        pytest.skip(f"calc_pressure module not available: {e}")
     
     try:
         from ml_peg.analysis.bulk_crystal.pressure import analyse_pressure
         assert hasattr(analyse_pressure, "test_pressure")
     except ImportError as e:
-        # If dependencies are missing, skip the test
-        pass
+        pytest.skip(f"analyse_pressure module not available: {e}")
     
     try:
         from ml_peg.app.bulk_crystal.pressure import app_pressure
         assert hasattr(app_pressure, "get_app")
     except ImportError as e:
-        # If dependencies are missing, skip the test
-        pass
+        pytest.skip(f"app_pressure module not available: {e}")

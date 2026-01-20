@@ -97,8 +97,17 @@ def volumes_vs_pressure() -> dict[str, list]:
                     results[model_name].append(struct_results[key]["volume"])
             
             # Store reference volumes (only once)
-            # For now, we don't have reference data, so skip ref storage
-            # In a real implementation, reference data would come from DFT calculations
+            # TODO: Reference data should be loaded from DFT calculations
+            # When reference data is available, it should be stored in:
+            # - A reference JSON file with pressure-volume data for each structure
+            # - Or as metadata in the structure files themselves
+            # For now, this benchmark focuses on comparing MLIP models to each other
+            # Once Alexandria data includes reference values, update this section to:
+            # if not ref_stored:
+            #     for pressure in PRESSURES:
+            #         key = f"pressure_{pressure}gpa"
+            #         if key in reference_data[struct_name]:
+            #             results["ref"].append(reference_data[struct_name][key]["volume"])
 
     return results
 
@@ -144,9 +153,11 @@ def volume_compression_errors() -> dict[str, float]:
                 # Calculate relative volume change from 0 to 150 GPa
                 if volumes[0] > 0:
                     rel_change = (volumes[0] - volumes[-1]) / volumes[0]
-                    # Expected compression is typically 5-20% for 150 GPa
-                    # We'll use a simple error metric: deviation from expected behavior
-                    # This is a placeholder - in real implementation, compare with DFT
+                    # TODO: Compare with reference compression data when available
+                    # Expected compression is typically 5-20% for 150 GPa depending on material
+                    # Current implementation measures compression magnitude as a proxy metric
+                    # Once reference data is available from Alexandria, compute:
+                    # error = abs(rel_change - reference_compression[struct_name])
                     errors.append(abs(rel_change))
         
         if errors:
@@ -210,8 +221,11 @@ def bulk_modulus_errors() -> dict[str, float]:
                         dP = pressures[-1] - pressures[0]
                         if dV != 0:
                             bulk_modulus = -v0 * dP / dV
-                            # This is a placeholder for actual error calculation
-                            # In real implementation, compare with reference bulk modulus
+                            # TODO: Compare with reference bulk modulus when available
+                            # Current implementation computes bulk modulus as a consistency check
+                            # Once reference data is available, compute:
+                            # error = abs(bulk_modulus - reference_bulk_modulus[struct_name])
+                            # For now, store the computed value for relative comparison
                             errors.append(abs(bulk_modulus))
         
         if errors:
